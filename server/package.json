@@ -1,0 +1,24 @@
+{
+  "name": "fsg-api",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch index.js",
+    "start": "node index.js",
+    "check": "node --check index.js && node --check src/app.js && node --check src/config/db.js && node --check src/middleware/auth.js && node --check src/models/index.js && node --check src/routes/admin.js && node --check src/routes/public.js && node --check src/utils/crypto.js && node --check src/utils/document.js && node --check src/utils/email.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.1",
+    "nodemailer": "^10.6.0",
+    "pdfkit": "^0.16.0"
+  }
+}

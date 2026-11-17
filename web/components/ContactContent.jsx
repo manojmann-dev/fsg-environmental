@@ -1,0 +1,21 @@
+import { getContactData } from '../lib/api';
+import { defaultContact } from '../lib/seed-data';
+import DynamicForm from './DynamicForm';
+import { PageSections } from './Sections';
+
+export default async function ContactContent() {
+ const data = await getContactData(); const contact = { ...defaultContact, ...(data?.contact || {}) }; const branches = data?.branches || [];
+ const formSlug = contact.defaultFormSlug || data?.defaultFormSlug || 'project-scope';
+ const sections = [
+  { id: 'hero', type: 'hero', visible: true, data: { eyebrow: contact.eyebrow || 'CONTACT', title: contact.title || 'Let’s scope the work.', text: contact.intro || defaultContact.intro, image: contact.heroImage || '/images/contact-hero.webp', primaryLabel: contact.heroButtonLabel || 'Prepare a project brief', primaryHref: contact.heroButtonHref || '#request', secondaryLabel: contact.heroSecondaryLabel || 'Review the process', secondaryHref: contact.heroSecondaryHref || '/how-we-work' } }
+ ];
+ return <>
+  {contact.contactPageVisible === false ? <main className="container hidden-page"><h1>Contact information is currently being updated.</h1><p>Please try again later.</p></main> : <>
+   <PageSections sections={sections} kicker="Contact" pageSlug="contact"/>
+   <section className="content-section tone-white" id="request"><div className="container"><div className="contact-intro-grid"><div><div className="eyebrow">{contact.formEyebrow || '01  REQUEST A SCOPE REVIEW'}</div><h2>{contact.formTitle || 'Prepare your service request.'}</h2></div><p>{contact.formIntro || 'This project brief helps define the service, location and timing before the next steps are confirmed.'}</p></div><div className="contact-form-layout"><div className="contact-side"><h3>Start with the essentials.</h3>{contact.mainPhone && <p><b>Phone</b><a href={`tel:${contact.mainPhone.replace(/[^+\d]/g,'')}`}>{contact.mainPhone}</a></p>}{contact.mainEmail && <p><b>Email</b><a href={`mailto:${contact.mainEmail}`}>{contact.mainEmail}</a></p>}{contact.address && <p><b>Office</b>{contact.address}</p>}{contact.emergencyNotice && <div className="notice-box">{contact.emergencyNotice}</div>}</div><div className="contact-form-card"><DynamicForm formSlug={formSlug} pageSlug="contact"/></div></div></div></section>
+   {contact.showBranches !== false && branches.length > 0 && <section className="content-section tone-pale"><div className="container"><div className="section-heading"><div><div className="eyebrow">{contact.branchesEyebrow || '02  OUR LOCATIONS'}</div><h2>{contact.branchesTitle || 'Contact a branch.'}</h2></div><p className="section-intro">{contact.branchesIntro || 'Our branch details are managed by the FSG team. Contact the location relevant to your site.'}</p></div><div className="branch-grid">{branches.map(branch=><article className="branch-card" key={branch._id || branch.name}><div className="eyebrow">{branch.label || 'FSG LOCATION'}</div><h3>{branch.name}</h3><p>{[branch.address,branch.city,branch.region,branch.postalCode,branch.country].filter(Boolean).join(', ')}</p>{branch.phone && <a href={`tel:${branch.phone.replace(/[^+\d]/g,'')}`}>{branch.phone}</a>}{branch.email && <a href={`mailto:${branch.email}`}>{branch.email}</a>}{branch.openingHours && <small>{branch.openingHours}</small>}{branch.mapUrl && <a className="text-link" target="_blank" rel="noreferrer" href={branch.mapUrl}>View location ↗</a>}</article>)}</div></div></section>}
+   <section className="content-section tone-white"><div className="container"><div className="rich-layout"><div><div className="eyebrow">{contact.incidentEyebrow || '03  CONTACT'}</div><h2>{contact.incidentTitle || 'For an active incident.'}</h2></div><div className="rich-copy"><p>{contact.incidentText || contact.emergencyNotice || defaultContact.emergencyNotice}</p></div></div></div></section>
+   <section className="cta-band"><div className="container cta-inner"><div><div className="eyebrow">{contact.ctaEyebrow || 'THE NEXT STEP'}</div><h2>{contact.ctaTitle || 'Need to understand the scope first?'}</h2><p>{contact.ctaText || 'Explore the service pages for typical work scopes, the information to prepare and the records that can be included.'}</p></div><a href={contact.ctaButtonHref || '/services'} className="button button-dark">{contact.ctaButtonLabel || 'Explore our services'} ↗</a></div></section>
+  </>}
+ </>;
+}

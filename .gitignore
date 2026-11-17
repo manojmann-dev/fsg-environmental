@@ -1,0 +1,13 @@
+node_modules
+web/.next
+web/.env.local
+.env
+.env.*.local
+coverage
+.DS_Store
+new/
+**/new/**
+*.zip
+
+logs/
+cache/
