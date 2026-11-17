@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import MotionEffects from '../components/MotionEffects';
 import { getPublicPage } from '../lib/api';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export async function generateMetadata() {
   const page = await getPublicPage('home'); const seo = page?.seo || {};
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
         <main>{children}</main>
         <Footer />
         <MotionEffects />
+        <SpeedInsights />
       </body>
     </html>
   );
